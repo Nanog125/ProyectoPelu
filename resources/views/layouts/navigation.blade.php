@@ -84,18 +84,29 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('businesses.list')" :active="request()->routeIs('businesses.list')">
-                {{ __('Peluqueros') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('user.bookings')" :active="request()->routeIs('user.bookings')">
-                {{ __('Mis reservas') }}
-            </x-responsive-nav-link>
+                    @if(Auth::user()->rol == "admin")
+                        <x-nav-link :href="route('admin.bookings')" :active="request()->routeIs('admin.bookings')">
+                            {{ __('Reservas') }}
+                        </x-nav-link>
+                    @else
+                        <x-nav-link :href="route('businesses.list')" :active="request()->routeIs('businesses.list')">
+                            {{ __('Peluqueros') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('user.bookings')" :active="request()->routeIs('user.bookings')">
+                            {{ __('Mis reservas') }}
+                        </x-nav-link>
+                    @endif
         </div>
 
         <!-- Responsive Settings Options -->
         <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
             <div class="px-4">
                 <div class="font-medium text-base text-gray-800 dark:text-gray-200">{{ Auth::user()->name }}</div>
+                @if(Auth::user()->rol != "admin")
+                    <span class="ms-2 bg-green-100 dark:bg-green-900 text-green-200 dark:text-green-300 px-2 py-1 rounded-full text-xs font-semibold">
+                        <span>Créditos: {{ Auth::user()->credit }}</span>
+                    </span>
+                @endif
                 <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
             </div>
 
